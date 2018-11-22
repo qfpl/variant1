@@ -3,10 +3,6 @@
 {-# language FlexibleInstances, FlexibleContexts, MultiParamTypeClasses #-}
 {-# language UndecidableInstances #-}
 {-# language ScopedTypeVariables #-}
-{-# language InstanceSigs #-}
-{-# language ConstraintKinds, TypeFamilies #-}
-{-# language RoleAnnotations #-}
-{-# language FunctionalDependencies #-}
 module Data.Variant1
   ( Variant1
   , absurdV1
