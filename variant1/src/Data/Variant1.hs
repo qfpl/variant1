@@ -8,7 +8,9 @@ module Data.Variant1
   , absurdV1
   , widenV1
   , elimV1
-  , Ctor1(..)
+  , Ctor1
+  , inj1
+  , prj1
   )
 where
 
