@@ -14,4 +14,4 @@ let
 
 in
 
-  variant (haskellPackages.callPackage f {});
+  variant (haskellPackages.callPackage f {})
