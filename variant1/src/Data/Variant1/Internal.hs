@@ -8,7 +8,7 @@
 {-# language UndecidableInstances #-}
 module Data.Variant1.Internal where
 
-import Data.Functor.Classes (Show1(..), showsPrec1)
+import Data.Functor.Classes (Eq1(..), eq1, Show1(..), showsPrec1)
 import Data.Generics.Fixplate.Base (ShowF(..))
 import Data.Kind (Constraint)
 import GHC.Base (Any)
@@ -88,6 +88,26 @@ instance (Show1 v, Show1 (Variant1 vs)) => Show1 (Variant1 (v ': vs)) where
          showString "Variant1 " .
          liftShowsPrec a b 11 val)
       (liftShowsPrec a b c)
+
+instance Eq1 (Variant1 '[]) where
+  {-# inline liftEq #-}
+  liftEq _ = absurdV1
+
+instance (Eq1 v, Eq1 (Variant1 vs)) => Eq1 (Variant1 (v ': vs)) where
+  {-# inline liftEq #-}
+  liftEq :: (a -> b -> Bool) -> Variant1 (v ': vs) a -> Variant1 (v ': vs) b -> Bool
+  liftEq f (Variant1 0 a) (Variant1 0 b) =
+    liftEq f (unsafeCoerce a :: v a) (unsafeCoerce b :: v b)
+  liftEq f (Variant1 0 a) (Variant1 n b) = False
+  liftEq f (Variant1 n a) (Variant1 0 b) = False
+  liftEq f (Variant1 n a) (Variant1 m b) =
+    liftEq f
+      (Variant1 (n-1) a :: Variant1 vs a)
+      (Variant1 (m-1) b :: Variant1 vs b)
+
+instance (Eq1 (Variant1 vs), Eq a) => Eq (Variant1 vs a) where
+  {-# inline (==) #-}
+  (==) = eq1
 
 instance (Show1 (Variant1 vs), Show a) => Show (Variant1 vs a) where
   {-# inline showsPrec #-}
